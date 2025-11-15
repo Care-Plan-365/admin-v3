@@ -6,6 +6,7 @@ import App from './App.tsx';
 import { AuthProvider } from './context/AuthContext';
 import { ProviderProvider } from './context/ProviderContext';
 import { PracticeContextProvider } from './context/PracticeContext';
+import { PatientContextProvider } from './context/PatientContext';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,7 +14,9 @@ createRoot(document.getElementById('root')!).render(
       <AuthProvider>
         <ProviderProvider>
           <PracticeContextProvider>
-            <App />
+            <PatientContextProvider>
+              <App />
+            </PatientContextProvider>
           </PracticeContextProvider>
         </ProviderProvider>
       </AuthProvider>

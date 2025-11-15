@@ -22,7 +22,8 @@ const dashboardCards = [
         id: "patients",
         title: "Patients",
         description: "Patient engagement and care plans.",
-        interactive: false,
+      to: "/patients",
+      interactive: true,
     },
     {
         id: "financials",
