@@ -5,13 +5,16 @@ import './index.css';
 import App from './App.tsx';
 import { AuthProvider } from './context/AuthContext';
 import { ProviderProvider } from './context/ProviderContext';
+import { PracticeContextProvider } from './context/PracticeContext';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <ProviderProvider>
-          <App />
+          <PracticeContextProvider>
+            <App />
+          </PracticeContextProvider>
         </ProviderProvider>
       </AuthProvider>
     </BrowserRouter>

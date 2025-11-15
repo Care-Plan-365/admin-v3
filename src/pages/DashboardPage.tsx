@@ -15,7 +15,8 @@ const dashboardCards = [
         id: "practices",
         title: "Practices",
         description: "Practice setup and credentialing.",
-        interactive: false,
+        to: "/practices",
+        interactive: true,
     },
     {
         id: "patients",
