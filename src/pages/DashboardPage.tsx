@@ -8,7 +8,7 @@ const dashboardCards = [
         title: "Providers",
         description: "Manage onboarding, approval, and assignments.",
         to: "/providers",
-        // status: "Session in progress"
+        // status: "Session in progress",
         interactive: true,
     },
     {
@@ -22,8 +22,7 @@ const dashboardCards = [
         id: "patients",
         title: "Patients",
         description: "Patient engagement and care plans.",
-      to: "/patients",
-      interactive: true,
+        interactive: false,
     },
     {
         id: "financials",
