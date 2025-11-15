@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { Tabs } from '../../components/ui/Tabs';
-import { Button } from '../../components/ui/Button';
 import { CurrentPatientsTab } from './CurrentPatientsTab';
 import { NewPatientsTab } from './NewPatientsTab';
 import { RejectedPatientsTab } from './RejectedPatientsTab';
@@ -11,24 +9,9 @@ type PatientTab = 'current' | 'new' | 'rejected';
 
 export const PatientsPage = () => {
   const [activeTab, setActiveTab] = useState<PatientTab>('current');
-  const navigate = useNavigate();
-
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-      return;
-    }
-    navigate('/dashboard');
-  };
 
   return (
     <section className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Button variant="secondary" size="sm" onClick={handleBack}>
-          Back
-        </Button>
-        <div className="h-px flex-1 bg-cp365-border" />
-      </div>
       <header className="space-y-2">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cp365-textMuted">
           Care navigation
