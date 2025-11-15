@@ -5,9 +5,10 @@ import { Tabs } from '../../components/ui/Tabs';
 import { Button } from '../../components/ui/Button';
 import { CurrentProvidersTab } from './CurrentProvidersTab';
 import { NewProvidersTab } from './NewProvidersTab';
+import { RejectedProvidersTab } from './RejectedProvidersTab';
 
 export const ProvidersPage = () => {
-  const [activeTab, setActiveTab] = useState<'current' | 'new'>('current');
+  const [activeTab, setActiveTab] = useState<'current' | 'new' | 'rejected'>('current');
   const navigate = useNavigate();
 
   return (
@@ -37,16 +38,21 @@ export const ProvidersPage = () => {
           </span>
         </div>
         <div className="mt-6">
-          <Tabs
-            tabs={[
-              { id: 'current', label: 'Current Providers' },
-              { id: 'new', label: 'New Providers' },
-            ]}
-            activeTab={activeTab}
-            onChange={(tabId) => setActiveTab(tabId as 'current' | 'new')}
-          />
+            <Tabs
+              tabs={[
+                { id: 'current', label: 'Current Providers' },
+                { id: 'new', label: 'New Providers' },
+                { id: 'rejected', label: 'Rejected Providers' },
+              ]}
+              activeTab={activeTab}
+              onChange={(tabId) => setActiveTab(tabId as 'current' | 'new' | 'rejected')}
+            />
         </div>
-        <div className="pt-6">{activeTab === 'current' ? <CurrentProvidersTab /> : <NewProvidersTab />}</div>
+          <div className="pt-6">
+            {activeTab === 'current' && <CurrentProvidersTab />}
+            {activeTab === 'new' && <NewProvidersTab />}
+            {activeTab === 'rejected' && <RejectedProvidersTab />}
+          </div>
       </Card>
     </section>
   );
