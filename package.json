@@ -1,4 +1,5 @@
 {
+  "homepage":"https://care-plan-365.github.io/admin-v3",
   "name": "care-plan-365",
   "private": true,
   "version": "0.0.0",
@@ -7,7 +8,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy":"npm run build",
+    "deploy":"gh-pages -d build"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.0",
