@@ -33,7 +33,7 @@ export const PatientsPage = () => {
                     </h1>
                     <p className="text-sm text-cp365-textMuted">
                         Monitor current patients, review new submissions, and
-                        keep rejected applications on file
+                        keep rejected applications on file.
                     </p>
                 </div>
                 <Button
