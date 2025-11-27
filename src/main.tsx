@@ -10,7 +10,7 @@ import { store } from './store';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ReduxProvider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename="/admin-v3">
         <PracticeContextProvider>
           <App />
         </PracticeContextProvider>
