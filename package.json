@@ -1,5 +1,5 @@
 {
-  "homepage":"https://care-plan-365.github.io/admin-v3",
+  "homepage": "https://care-plan-365.github.io/admin-v3",
   "name": "care-plan-365",
   "private": true,
   "version": "0.0.0",
@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.0",
+    "gh-pages": "^6.3.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-redux": "^9.2.0",
