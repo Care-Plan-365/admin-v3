@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { Tabs } from '../../components/ui/Tabs';
@@ -6,10 +6,18 @@ import { Button } from '../../components/ui/Button';
 import { CurrentProvidersTab } from './CurrentProvidersTab';
 import { NewProvidersTab } from './NewProvidersTab';
 import { RejectedProvidersTab } from './RejectedProvidersTab';
+import { useProviderContext } from '../../hooks/useProviderContext';
 
 export const ProvidersPage = () => {
   const [activeTab, setActiveTab] = useState<'current' | 'new' | 'rejected'>('current');
   const navigate = useNavigate();
+  const { refreshProviders, hasLoaded, isLoading, error } = useProviderContext();
+
+  useEffect(() => {
+    if (!hasLoaded && !isLoading) {
+      refreshProviders();
+    }
+  }, [hasLoaded, isLoading, refreshProviders]);
 
   return (
     <section className="space-y-6">
@@ -29,6 +37,11 @@ export const ProvidersPage = () => {
       </header>
 
       <Card className="rounded-3xl p-6">
+        {error && (
+          <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
         <div className="flex items-center justify-between">
           <p className="text-xs font-semibold uppercase tracking-wide text-cp365-textMuted">
             Provider Management

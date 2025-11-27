@@ -1,10 +1,40 @@
-import { useContext } from 'react';
-import { PatientContext } from '../context/patient-context';
+import { useCallback } from 'react';
+import { useAppDispatch, useAppSelector } from './redux';
+import {
+  approvePatient,
+  fetchPatientsRequest,
+  rejectPatient,
+} from '../store/patients/slice';
 
 export const usePatientContext = () => {
-  const context = useContext(PatientContext);
-  if (!context) {
-    throw new Error('usePatientContext must be used within a PatientContextProvider');
-  }
-  return context;
+  const dispatch = useAppDispatch();
+  const state = useAppSelector((rootState) => rootState.patients);
+
+  const approve = useCallback(
+    (id: string) => {
+      dispatch(approvePatient({ id }));
+    },
+    [dispatch],
+  );
+
+  const reject = useCallback(
+    (id: string) => {
+      dispatch(rejectPatient({ id }));
+    },
+    [dispatch],
+  );
+
+  const refreshPatients = useCallback(() => {
+    dispatch(fetchPatientsRequest());
+  }, [dispatch]);
+
+  return {
+    patients: state.patients,
+    isLoading: state.loading,
+    error: state.error,
+    hasLoaded: state.hasLoaded,
+    approvePatient: approve,
+    rejectPatient: reject,
+    refreshPatients,
+  };
 };

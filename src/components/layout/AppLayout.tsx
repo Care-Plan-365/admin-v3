@@ -3,7 +3,7 @@ import { Button } from '../ui/Button';
 import { useAuth } from '../../hooks/useAuth';
 
 export const AppLayout = () => {
-  const { logout } = useAuth();
+  const { logout, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -30,8 +30,8 @@ export const AppLayout = () => {
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cp365-primary/15 text-sm font-semibold text-cp365-primary">
               AD
             </div>
-            <Button variant="secondary" size="sm" onClick={handleLogout}>
-              Logout
+            <Button variant="secondary" size="sm" onClick={handleLogout} disabled={loading}>
+              {loading ? 'Logging out…' : 'Logout'}
             </Button>
           </div>
         </div>

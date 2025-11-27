@@ -3,8 +3,16 @@ import { Table } from '../../components/ui/Table';
 import { useProviderContext } from '../../hooks/useProviderContext';
 
 export const NewProvidersTab = () => {
-  const { providers, approveProvider, rejectProvider } = useProviderContext();
+  const { providers, approveProvider, rejectProvider, isLoading, updating } = useProviderContext();
   const pendingProviders = providers.filter((provider) => provider.status === 'pending');
+
+  if (isLoading && !providers.length) {
+    return (
+      <div className="rounded-2xl border border-dashed border-cp365-border bg-white px-8 py-12 text-center text-sm text-cp365-textMuted">
+        Loading providers…
+      </div>
+    );
+  }
 
   if (pendingProviders.length === 0) {
     return (
@@ -24,14 +32,10 @@ export const NewProvidersTab = () => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-cp365-textMuted">
-            New Providers
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-cp365-textMuted">New Providers</p>
           <h2 className="text-xl font-semibold text-cp365-textMain">Pending approval</h2>
         </div>
-        <p className="text-sm font-medium text-cp365-textMuted">
-          {pendingProviders.length} awaiting review
-        </p>
+        <p className="text-sm font-medium text-cp365-textMuted">{pendingProviders.length} awaiting review</p>
       </div>
 
       <Table>
@@ -45,31 +49,35 @@ export const NewProvidersTab = () => {
           </tr>
         </thead>
         <tbody>
-          {pendingProviders.map((provider) => (
-            <tr
-              key={provider.id}
-              className="border-t border-cp365-border/80 text-sm text-cp365-textMain hover:bg-slate-50 transition"
-            >
-              <td className="px-6 py-4 font-semibold">{provider.firstName}</td>
-              <td className="px-6 py-4">{provider.lastName}</td>
-              <td className="px-6 py-4">{provider.ahpraNumber ?? '—'}</td>
-              <td className="px-6 py-4">{provider.providerType}</td>
-              <td className="px-6 py-4 text-right">
-                <div className="flex justify-end gap-2">
-                  <Button size="sm" onClick={() => approveProvider(provider.id)}>
-                    Approve
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    onClick={() => rejectProvider(provider.id)}
-                  >
-                    Reject
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          ))}
+          {pendingProviders.map((provider) => {
+            const isUpdating = Boolean(updating[provider.id]);
+            return (
+              <tr
+                key={provider.id}
+                className="border-t border-cp365-border/80 text-sm text-cp365-textMain transition hover:bg-slate-50"
+              >
+                <td className="px-6 py-4 font-semibold">{provider.firstName}</td>
+                <td className="px-6 py-4">{provider.lastName}</td>
+                <td className="px-6 py-4">{provider.ahpraNumber ?? '—'}</td>
+                <td className="px-6 py-4">{provider.providerType}</td>
+                <td className="px-6 py-4 text-right">
+                  <div className="flex justify-end gap-2">
+                    <Button size="sm" onClick={() => approveProvider(provider.id)} disabled={isUpdating}>
+                      {isUpdating ? 'Updating…' : 'Approve'}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      onClick={() => rejectProvider(provider.id)}
+                      disabled={isUpdating}
+                    >
+                      {isUpdating ? 'Updating…' : 'Reject'}
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
     </div>

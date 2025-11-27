@@ -5,7 +5,7 @@ import { PatientsTable } from './PatientsTable';
 import { filterPatients } from './utils';
 
 export const CurrentPatientsTab = () => {
-  const { patients } = usePatientContext();
+  const { patients, isLoading } = usePatientContext();
   const currentPatients = useMemo(
     () => patients.filter((patient) => patient.status === 'current'),
     [patients],
@@ -35,7 +35,11 @@ export const CurrentPatientsTab = () => {
         <PatientSearchBar query={query} onQueryChange={setQuery} onSearch={handleSearch} />
       </div>
 
-      {filteredPatients.length === 0 ? (
+      {isLoading && !patients.length ? (
+        <div className="rounded-2xl border border-dashed border-cp365-border bg-cp365-bg/40 px-6 py-12 text-center text-sm text-cp365-textMuted">
+          Loading patients…
+        </div>
+      ) : filteredPatients.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-cp365-border bg-cp365-bg/40 px-6 py-12 text-center text-sm text-cp365-textMuted">
           No current patients to display.
         </div>

@@ -1,25 +1,20 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider as ReduxProvider } from 'react-redux';
 import './index.css';
 import App from './App.tsx';
-import { AuthProvider } from './context/AuthContext';
-import { ProviderProvider } from './context/ProviderContext';
 import { PracticeContextProvider } from './context/PracticeContext';
-import { PatientContextProvider } from './context/PatientContext';
+import { store } from './store';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <ProviderProvider>
-          <PracticeContextProvider>
-            <PatientContextProvider>
-              <App />
-            </PatientContextProvider>
-          </PracticeContextProvider>
-        </ProviderProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <ReduxProvider store={store}>
+      <BrowserRouter>
+        <PracticeContextProvider>
+          <App />
+        </PracticeContextProvider>
+      </BrowserRouter>
+    </ReduxProvider>
   </StrictMode>,
 );

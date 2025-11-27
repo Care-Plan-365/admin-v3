@@ -2,8 +2,16 @@ import { Table } from '../../components/ui/Table';
 import { useProviderContext } from '../../hooks/useProviderContext';
 
 export const RejectedProvidersTab = () => {
-  const { providers } = useProviderContext();
+  const { providers, isLoading } = useProviderContext();
   const rejectedProviders = providers.filter((provider) => provider.status === 'rejected');
+
+  if (isLoading && !providers.length) {
+    return (
+      <div className="rounded-2xl border border-dashed border-cp365-border bg-white px-8 py-12 text-center text-sm text-cp365-textMuted">
+        Loading providers…
+      </div>
+    );
+  }
 
   if (rejectedProviders.length === 0) {
     return (

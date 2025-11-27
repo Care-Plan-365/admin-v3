@@ -3,7 +3,7 @@ import { Table } from '../../components/ui/Table';
 import { useProviderContext } from '../../hooks/useProviderContext';
 
 export const CurrentProvidersTab = () => {
-  const { providers } = useProviderContext();
+  const { providers, isLoading } = useProviderContext();
   const [query, setQuery] = useState('');
 
   const currentProviders = useMemo(
@@ -30,6 +30,14 @@ export const CurrentProvidersTab = () => {
 
     return searchString.includes(query.trim().toLowerCase());
   });
+
+  if (isLoading && !providers.length) {
+    return (
+      <div className="rounded-2xl border border-dashed border-cp365-border bg-white px-8 py-12 text-center text-sm text-cp365-textMuted">
+        Loading providers…
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">

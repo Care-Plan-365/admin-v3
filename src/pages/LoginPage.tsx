@@ -1,16 +1,22 @@
 import type { FormEvent } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { useAuth } from '../hooks/useAuth';
 
 export const LoginPage = () => {
-  const { login } = useAuth();
+  const { login, isAuthenticated, loading, error: authError } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,8 +26,8 @@ export const LoginPage = () => {
       return;
     }
 
+    setError('');
     login(email, password);
-    navigate('/dashboard');
   };
 
   return (
@@ -61,9 +67,9 @@ export const LoginPage = () => {
               placeholder="••••••••"
             />
           </div>
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          <Button type="submit" className="w-full justify-center">
-            Sign In
+          {(error || authError) && <p className="text-sm text-red-600">{error || authError}</p>}
+          <Button type="submit" className="w-full justify-center" disabled={loading}>
+            {loading ? 'Signing In…' : 'Sign In'}
           </Button>
         </form>
       </Card>
