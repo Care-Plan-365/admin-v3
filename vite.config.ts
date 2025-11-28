@@ -7,5 +7,5 @@ export default defineConfig({
   build:{
     outDir: 'dist',
   },
-  base: '/adminv3/',
+  base: '/admin-v3/',
 })
