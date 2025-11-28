@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')!).render(
         <PracticeContextProvider>
           <App />
         </PracticeContextProvider>
-      </HashRouter>
+      </BrowserRouter>
     </ReduxProvider>
   </StrictMode>,
 );
