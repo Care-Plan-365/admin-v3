@@ -43,8 +43,9 @@ const buildHeaders = (init?: HeadersInit, skipAuth?: boolean): Headers => {
 
   if (!skipAuth) {
     const token = getStoredToken();
-    if (token) {
-      headers.set('Authorization', `Bearer ${token}`);
+    const normalizedToken = token?.trim();
+    if (normalizedToken) {
+      headers.set('Authorization', `Bearer ${normalizedToken}`);
     }
   }
 

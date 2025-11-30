@@ -11,9 +11,53 @@ import {
     type LoginPayload,
 } from "./slice";
 
-interface LoginResponse {
-    token?: string;
-}
+type LoginResponse = Record<string, unknown>;
+
+const extractToken = (payload: LoginResponse | undefined): string | null => {
+    if (!payload) {
+        return null;
+    }
+
+    const search = (value: unknown, tokenHint = false): string | null => {
+        if (!value) {
+            return null;
+        }
+
+        if (typeof value === "string") {
+            if (tokenHint) {
+                const trimmed = value.trim();
+                return trimmed || null;
+            }
+            return null;
+        }
+
+        if (Array.isArray(value)) {
+            for (const item of value) {
+                const match = search(item, tokenHint);
+                if (match) {
+                    return match;
+                }
+            }
+            return null;
+        }
+
+        if (typeof value === "object" && value !== null) {
+            for (const [key, nested] of Object.entries(
+                value as Record<string, unknown>
+            )) {
+                const keyHasToken = tokenHint || key.toLowerCase().includes("token");
+                const match = search(nested, keyHasToken);
+                if (match) {
+                    return match;
+                }
+            }
+        }
+
+        return null;
+    };
+
+    return search(payload, false);
+};
 
 const getMessage = (error: unknown): string => {
     if (error instanceof Error && error.message) {
@@ -34,7 +78,10 @@ function* handleLogin(action: { type: string; payload: LoginPayload }) {
             }
         );
 
-        const token = response?.token ?? null;
+        const token = extractToken(response);
+        if (!token) {
+            throw new Error("Authentication token was not returned by the server.");
+        }
         yield call(persistAuthSession, { token, isAuthenticated: true });
         yield put(loginSuccess({ token }));
     } catch (error) {

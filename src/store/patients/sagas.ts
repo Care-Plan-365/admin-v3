@@ -1,11 +1,13 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { apiClient } from "../../api/client";
+import { ApiError, apiClient } from "../../api/client";
 import type { Patient } from "../../types/patient";
 import {
     fetchPatientsFailure,
     fetchPatientsRequest,
     fetchPatientsSuccess,
 } from "./slice";
+import { clearAuthSession } from "../../utils/authStorage";
+import { logoutSuccess } from "../auth/slice";
 
 const getMessage = (error: unknown): string => {
     if (error instanceof Error && error.message) {
@@ -22,6 +24,17 @@ function* fetchPatients() {
         );
         yield put(fetchPatientsSuccess(patients));
     } catch (error) {
+        if (error instanceof ApiError && error.status === 401) {
+            yield call(clearAuthSession);
+            yield put(logoutSuccess());
+            yield put(
+                fetchPatientsFailure(
+                    "Your session has expired. Please sign in again."
+                )
+            );
+            return;
+        }
+
         yield put(fetchPatientsFailure(getMessage(error)));
     }
 }
