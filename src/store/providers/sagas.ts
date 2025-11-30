@@ -11,10 +11,21 @@ import {
     rejectProviderRequest,
     rejectProviderSuccess,
 } from "./slice";
-import type { Provider } from "../../types/provider";
+import type { Provider, ProviderStatus } from "../../types/provider";
 import { normalizeEntityArray } from "../../utils/normalizeEntityArray";
 
 const providerArrayKeys = ["providers", "data", "items", "results"];
+
+const normalizeProviderStatus = (status: unknown): ProviderStatus => {
+    if (typeof status === "string") {
+        const normalized = status.trim().toLowerCase();
+        if (normalized === "approved" || normalized === "rejected") {
+            return normalized;
+        }
+    }
+
+    return "pending";
+};
 
 const normalizeProvidersPayload = (payload: unknown): Provider[] => {
     return normalizeEntityArray<Provider>(
@@ -45,7 +56,12 @@ function* fetchProviders() {
         );
         // const providers = normalizeProvidersPayload(response);
         const providersPayload = response?.data?.providers;
-        const providers = normalizeProvidersPayload(providersPayload);
+        const providers = normalizeProvidersPayload(providersPayload).map(
+            (provider) => ({
+                ...provider,
+                status: normalizeProviderStatus(provider.status),
+            })
+        );
 
         yield put(fetchProvidersSuccess(providers));
         console.log(response.data?.providers, "response");

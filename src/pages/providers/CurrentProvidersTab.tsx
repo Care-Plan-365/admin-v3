@@ -7,7 +7,11 @@ export const CurrentProvidersTab = () => {
     const [query, setQuery] = useState("");
 
     const currentProviders = useMemo(
-        () => providers.filter((provider) => provider.status === "approved"),
+        () =>
+            providers.filter(
+                (provider) =>
+                    (provider.status ?? "").toLowerCase() === "approved"
+            ),
         [providers]
     );
 
