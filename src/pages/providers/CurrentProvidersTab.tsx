@@ -10,9 +10,9 @@ export const CurrentProvidersTab = () => {
     //     () =>
     //         providers.filter(
     //             (provider) =>
-    //                 (provider.status ?? "").toLowerCase() === "approved"
+    //                 (provider.status ?? "").toLowerCase() === "approved",
     //         ),
-    //     [providers],
+    //     [providers]
     // );
 
     const currentProviders = providers;
