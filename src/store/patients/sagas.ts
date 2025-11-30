@@ -12,6 +12,7 @@ import { normalizeEntityArray } from "../../utils/normalizeEntityArray";
 
 const patientArrayKeys = ["patients", "data", "items", "results"];
 
+// const normalizePatientsPayload = (payload: unknown): Patient[] => {
 const normalizePatientsPayload = (payload: unknown): Patient[] => {
     return normalizeEntityArray<Patient>(
         payload,
@@ -27,14 +28,23 @@ const getMessage = (error: unknown): string => {
     return "Unable to load patients.";
 };
 
+interface PatientsApiResponse {
+    data?: {
+        patients?: unknown;
+    };
+}
+
 function* fetchPatients() {
     try {
-        const response: unknown = yield call(
-            apiClient<unknown>,
+        const response: PatientsApiResponse = yield call(
+            apiClient<PatientsApiResponse>,
             "/admin/patients"
         );
-        const patients = normalizePatientsPayload(response);
+        // const patients = normalizePatientsPayload(response);
+        const patientsPayload = response?.data?.patients;
+        const patients = normalizePatientsPayload(patientsPayload);
         yield put(fetchPatientsSuccess(patients));
+        console.log(response.data, "response");
     } catch (error) {
         if (error instanceof ApiError && error.status === 401) {
             yield call(clearAuthSession);

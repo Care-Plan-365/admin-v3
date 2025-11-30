@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Table } from "../../components/ui/Table";
 import { useProviderContext } from "../../hooks/useProviderContext";
 
@@ -6,16 +6,18 @@ export const CurrentProvidersTab = () => {
     const { providers, isLoading } = useProviderContext();
     const [query, setQuery] = useState("");
 
-    const currentProviders = useMemo(
-        () =>
-            providers.filter(
-                (provider) =>
-                    (provider.status ?? "").toLowerCase() === "approved"
-            ),
-        [providers]
-    );
+    // const currentProviders = useMemo(
+    //     () =>
+    //         providers.filter(
+    //             (provider) =>
+    //                 (provider.status ?? "").toLowerCase() === "approved"
+    //         ),
+    //     [providers]
+    // );
 
-    console.log(currentProviders, "providers");
+    const currentProviders = providers;
+
+    console.log(providers, "providers");
 
     const filteredProviders = currentProviders.filter((provider) => {
         if (!query.trim()) {
@@ -91,13 +93,15 @@ export const CurrentProvidersTab = () => {
                                 {provider.lastName}
                             </td>
                             <td className="px-6 py-4 text-sm text-cp365-textMain">
-                                {provider.ahpraNumber ?? "—"}
+                                {/* @ts-expect-error location */}
+                                {provider.phone ?? "—"}
                             </td>
                             <td className="px-6 py-4 text-sm text-cp365-textMain">
                                 {provider.providerType}
                             </td>
                             <td className="px-6 py-4 text-sm text-cp365-textMain">
-                                {provider.practice ?? "—"}
+                                {/* @ts-expect-error location */}
+                                {provider.location ?? "—"}
                             </td>
                             <td className="px-6 py-4 text-sm text-cp365-textMain">
                                 <div className="flex flex-col text-xs text-cp365-textMuted">
