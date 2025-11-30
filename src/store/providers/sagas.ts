@@ -13,6 +13,26 @@ import {
 } from "./slice";
 import type { Provider } from "../../types/provider";
 
+const providerArrayKeys = ["providers", "data", "items", "results"];
+
+const normalizeProvidersPayload = (payload: unknown): Provider[] => {
+    if (Array.isArray(payload)) {
+        return payload as Provider[];
+    }
+
+    if (payload && typeof payload === "object") {
+        const container = payload as Record<string, unknown>;
+        for (const key of providerArrayKeys) {
+            const value = container[key];
+            if (Array.isArray(value)) {
+                return value as Provider[];
+            }
+        }
+    }
+
+    throw new Error("Received malformed providers payload.");
+};
+
 const getMessage = (error: unknown): string => {
     if (error instanceof Error && error.message) {
         return error.message;
@@ -22,11 +42,12 @@ const getMessage = (error: unknown): string => {
 
 function* fetchProviders() {
     try {
-        const response: Provider[] = yield call(
-            apiClient<Provider[]>,
+        const response: unknown = yield call(
+            apiClient<unknown>,
             "/admin/providers"
         );
-        yield put(fetchProvidersSuccess(response));
+        const providers = normalizeProvidersPayload(response);
+        yield put(fetchProvidersSuccess(providers));
     } catch (error) {
         yield put(fetchProvidersFailure(getMessage(error)));
     }

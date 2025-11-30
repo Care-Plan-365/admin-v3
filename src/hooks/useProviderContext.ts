@@ -9,6 +9,10 @@ import {
 export const useProviderContext = () => {
   const dispatch = useAppDispatch();
   const state = useAppSelector((rootState) => rootState.providers);
+  const providers = Array.isArray(state.providers) ? state.providers : [];
+  const updating =
+    state.updating && typeof state.updating === 'object' ? state.updating : {};
+  const error = typeof state.error === 'string' ? state.error : null;
 
   const approveProvider = useCallback(
     (id: string) => {
@@ -29,11 +33,11 @@ export const useProviderContext = () => {
   }, [dispatch]);
 
   return {
-    providers: state.providers,
-    isLoading: state.loading,
-    error: state.error,
-    hasLoaded: state.hasLoaded,
-    updating: state.updating,
+    providers,
+    isLoading: Boolean(state.loading),
+    error,
+    hasLoaded: Boolean(state.hasLoaded),
+    updating,
     approveProvider,
     rejectProvider,
     refreshProviders,
