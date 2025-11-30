@@ -31,16 +31,24 @@ const getMessage = (error: unknown): string => {
     return "Unable to complete the request.";
 };
 
+interface ProvidersApiResponse {
+    data?: {
+        providers?: unknown;
+    };
+}
+
 function* fetchProviders() {
     try {
-        const response: unknown = yield call(
-            apiClient<unknown>,
+        const response: ProvidersApiResponse = yield call(
+            apiClient<ProvidersApiResponse>,
             "/admin/providers"
         );
-        const providers = normalizeProvidersPayload(response);
+        // const providers = normalizeProvidersPayload(response);
+        const providersPayload = response?.data?.providers;
+        const providers = normalizeProvidersPayload(providersPayload);
 
         yield put(fetchProvidersSuccess(providers));
-        console.log(response, "response");
+        console.log(response.data?.providers, "response");
     } catch (error) {
         yield put(fetchProvidersFailure(getMessage(error)));
     }
