@@ -11,6 +11,8 @@ export const CurrentProvidersTab = () => {
         [providers]
     );
 
+    console.log(currentProviders, "providers");
+
     const filteredProviders = currentProviders.filter((provider) => {
         if (!query.trim()) {
             return true;
@@ -30,6 +32,8 @@ export const CurrentProvidersTab = () => {
 
         return searchString.includes(query.trim().toLowerCase());
     });
+
+    // console.log(providers, "providers");
 
     if (isLoading && !providers.length) {
         return (

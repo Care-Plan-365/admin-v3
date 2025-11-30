@@ -47,7 +47,9 @@ function* fetchProviders() {
             "/admin/providers"
         );
         const providers = normalizeProvidersPayload(response);
+
         yield put(fetchProvidersSuccess(providers));
+        console.log(response, "response");
     } catch (error) {
         yield put(fetchProvidersFailure(getMessage(error)));
     }
