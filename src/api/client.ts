@@ -18,7 +18,22 @@ type ClientOptions = Omit<RequestInit, 'body' | 'headers'> & {
   headers?: HeadersInit;
 };
 
-const getBaseUrl = () => import.meta.env.VITE_API_BASE_URL ?? '';
+const DEFAULT_API_BASE_URL = 'https://careplan-backend-v2-455e27abb649.herokuapp.com/api';
+
+const normalizeBaseUrl = (baseUrl: string | undefined) => {
+  if (!baseUrl) {
+    return DEFAULT_API_BASE_URL;
+  }
+
+  const trimmed = baseUrl.trim();
+  if (!trimmed) {
+    return DEFAULT_API_BASE_URL;
+  }
+
+  return trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed;
+};
+
+const getBaseUrl = () => normalizeBaseUrl(import.meta.env.VITE_API_BASE_URL);
 
 const buildHeaders = (init?: HeadersInit, skipAuth?: boolean): Headers => {
   const headers = new Headers(init ?? {});
@@ -42,7 +57,7 @@ export const apiClient = async <TResponse>(path: string, options: ClientOptions 
   const headers = buildHeaders(rest.headers, skipAuth);
   const config: RequestInit = {
     method: rest.method ?? 'GET',
-    credentials: rest.credentials ?? 'include',
+    credentials: rest.credentials ?? 'same-origin',
     headers,
     ...rest,
   };
