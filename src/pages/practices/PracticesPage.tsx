@@ -131,7 +131,7 @@ export const PracticesPage = () => {
                 <p>
                     For now, please contact the implementation team to add new
                     practices. This shortcut will activate when the workflow is
-                    ready
+                    ready.
                 </p>
             </Modal>
         </section>
