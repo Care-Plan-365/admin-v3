@@ -12,25 +12,16 @@ import {
     rejectProviderSuccess,
 } from "./slice";
 import type { Provider } from "../../types/provider";
+import { normalizeEntityArray } from "../../utils/normalizeEntityArray";
 
 const providerArrayKeys = ["providers", "data", "items", "results"];
 
 const normalizeProvidersPayload = (payload: unknown): Provider[] => {
-    if (Array.isArray(payload)) {
-        return payload as Provider[];
-    }
-
-    if (payload && typeof payload === "object") {
-        const container = payload as Record<string, unknown>;
-        for (const key of providerArrayKeys) {
-            const value = container[key];
-            if (Array.isArray(value)) {
-                return value as Provider[];
-            }
-        }
-    }
-
-    throw new Error("Received malformed providers payload.");
+    return normalizeEntityArray<Provider>(
+        payload,
+        providerArrayKeys,
+        "Received malformed providers payload."
+    );
 };
 
 const getMessage = (error: unknown): string => {

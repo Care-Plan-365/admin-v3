@@ -8,25 +8,16 @@ import {
 } from "./slice";
 import { clearAuthSession } from "../../utils/authStorage";
 import { logoutSuccess } from "../auth/slice";
+import { normalizeEntityArray } from "../../utils/normalizeEntityArray";
 
 const patientArrayKeys = ["patients", "data", "items", "results"];
 
 const normalizePatientsPayload = (payload: unknown): Patient[] => {
-    if (Array.isArray(payload)) {
-        return payload as Patient[];
-    }
-
-    if (payload && typeof payload === "object") {
-        const container = payload as Record<string, unknown>;
-        for (const key of patientArrayKeys) {
-            const value = container[key];
-            if (Array.isArray(value)) {
-                return value as Patient[];
-            }
-        }
-    }
-
-    throw new Error("Received malformed patients payload.");
+    return normalizeEntityArray<Patient>(
+        payload,
+        patientArrayKeys,
+        "Received malformed patients payload."
+    );
 };
 
 const getMessage = (error: unknown): string => {
