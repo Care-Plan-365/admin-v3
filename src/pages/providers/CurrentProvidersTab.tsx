@@ -12,7 +12,7 @@ export const CurrentProvidersTab = () => {
     //             (provider) =>
     //                 (provider.status ?? "").toLowerCase() === "approved"
     //         ),
-    //     [providers]
+    //     [providers],
     // );
 
     const currentProviders = providers;
