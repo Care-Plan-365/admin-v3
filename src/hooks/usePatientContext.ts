@@ -9,6 +9,8 @@ import {
 export const usePatientContext = () => {
   const dispatch = useAppDispatch();
   const state = useAppSelector((rootState) => rootState.patients);
+  const patients = Array.isArray(state.patients) ? state.patients : [];
+  const error = typeof state.error === 'string' ? state.error : null;
 
   const approve = useCallback(
     (id: string) => {
@@ -29,10 +31,10 @@ export const usePatientContext = () => {
   }, [dispatch]);
 
   return {
-    patients: state.patients,
-    isLoading: state.loading,
-    error: state.error,
-    hasLoaded: state.hasLoaded,
+    patients,
+    isLoading: Boolean(state.loading),
+    error,
+    hasLoaded: Boolean(state.hasLoaded),
     approvePatient: approve,
     rejectPatient: reject,
     refreshPatients,
