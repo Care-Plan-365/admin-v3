@@ -33,8 +33,6 @@ export const CurrentProvidersTab = () => {
         return searchString.includes(query.trim().toLowerCase());
     });
 
-    // console.log(providers, "providers");
-
     if (isLoading && !providers.length) {
         return (
             <div className="rounded-2xl border border-dashed border-cp365-border bg-white px-8 py-12 text-center text-sm text-cp365-textMuted">
