@@ -6,10 +6,8 @@ import { filterPatients } from "./utils";
 
 export const CurrentPatientsTab = () => {
     const { patients, isLoading } = usePatientContext();
-    const currentPatients = useMemo(
-        () => patients.filter((patient) => patient.status === "current"),
-        [patients]
-    );
+
+    const currentPatients = patients;
     const [query, setQuery] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -17,6 +15,8 @@ export const CurrentPatientsTab = () => {
         () => filterPatients(currentPatients, searchTerm),
         [currentPatients, searchTerm]
     );
+
+    console.log(currentPatients, "currentPatients");
 
     const handleSearch = () => {
         setSearchTerm(query.trim());
@@ -49,7 +49,7 @@ export const CurrentPatientsTab = () => {
                     No current patients to display.
                 </div>
             ) : (
-                <PatientsTable patients={filteredPatients} />
+                <PatientsTable patients={patients} />
             )}
         </div>
     );
