@@ -57,7 +57,7 @@ export const PatientsPage = () => {
                             Patients
                         </p>
                         <h2 className="text-2xl font-semibold text-cp365-textMain">
-                            Patient management.
+                            Patient management
                         </h2>
                     </div>
                     <span className="text-sm text-cp365-textMuted">
