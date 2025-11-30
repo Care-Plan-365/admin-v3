@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/Button";
 import { Card } from "../../components/ui/Card";
@@ -13,7 +13,14 @@ type PatientTab = "current" | "new" | "rejected";
 export const PatientsPage = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<PatientTab>("current");
-    const { error } = usePatientContext();
+    const { refreshPatients, hasLoaded, isLoading, error } =
+        usePatientContext();
+
+    useEffect(() => {
+        if (!hasLoaded && !isLoading) {
+            refreshPatients();
+        }
+    }, [hasLoaded, isLoading, refreshPatients]);
 
     return (
         <section className="space-y-6">
