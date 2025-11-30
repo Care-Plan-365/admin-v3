@@ -11,7 +11,7 @@ import { logoutSuccess } from "../auth/slice";
 
 const patientArrayKeys = ["patients", "data", "items", "results"];
 
-const normalizePatientsPayload = (payload: unknown): Patient[] => {
+const findPatientsArray = (payload: unknown): Patient[] | null => {
     if (Array.isArray(payload)) {
         return payload as Patient[];
     }
@@ -20,12 +20,23 @@ const normalizePatientsPayload = (payload: unknown): Patient[] => {
         const container = payload as Record<string, unknown>;
         for (const key of patientArrayKeys) {
             const value = container[key];
-            if (Array.isArray(value)) {
-                return value as Patient[];
+            const array = findPatientsArray(value);
+            if (array) {
+                return array;
             }
         }
     }
 
+    return null;
+};
+
+const normalizePatientsPayload = (payload: unknown): Patient[] => {
+    // Some backends wrap patient arrays (e.g. { data: { patients: [] } }); walk
+    // through the known container keys until we find the actual array.
+    const patients = findPatientsArray(payload);
+    if (patients) {
+        return patients;
+    }
     throw new Error("Received malformed patients payload.");
 };
 
