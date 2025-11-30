@@ -1,11 +1,17 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePatientContext } from "../../hooks/usePatientContext";
 import { PatientSearchBar } from "./PatientSearchBar";
 import { PatientsTable } from "./PatientsTable";
 import { filterPatients } from "./utils";
 
 export const CurrentPatientsTab = () => {
-    const { patients, isLoading } = usePatientContext();
+    const { patients, isLoading, hasLoaded, refreshPatients } =
+        usePatientContext();
+    useEffect(() => {
+        if (!hasLoaded && !isLoading) {
+            refreshPatients();
+        }
+    }, [hasLoaded, isLoading, refreshPatients]);
     const currentPatients = useMemo(
         () => patients.filter((patient) => patient.status === "current"),
         [patients]
