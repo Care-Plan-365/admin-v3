@@ -6,12 +6,10 @@ import { filterPatients } from "./utils";
 
 export const CurrentPatientsTab = () => {
     const { patients, isLoading } = usePatientContext();
-    // const currentPatients = useMemo(
-    //     () => patients.filter((patient) => patient.status === "current"),
-    //     [patients]
-    // );
-
-    const currentPatients = patients;
+    const currentPatients = useMemo(
+        () => patients.filter((patient) => patient.status === "current"),
+        [patients]
+    );
     const [query, setQuery] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
 
