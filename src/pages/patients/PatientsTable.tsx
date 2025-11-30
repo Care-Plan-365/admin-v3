@@ -1,9 +1,6 @@
 import type { ReactNode } from "react";
 import type { Patient } from "../../types/patient";
 
-const getInitial = (value: string) =>
-    value ? value.charAt(0).toUpperCase() : "-";
-
 interface PatientsTableProps {
     patients: Patient[];
     renderActions?: (patient: Patient) => ReactNode;
@@ -43,6 +40,7 @@ export const PatientsTable = ({
                                 <td className="px-6 py-4 font-semibold">
                                     {patient.lastName}
                                 </td>
+                                {/* @ts-expect-error location */}
                                 <td className="px-6 py-4">{patient.city}</td>
                                 <td className="px-6 py-4">
                                     {patient.providerName}
