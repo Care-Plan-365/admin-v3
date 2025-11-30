@@ -54,7 +54,7 @@ function* fetchProviders() {
             apiClient<ProvidersApiResponse>,
             "/admin/providers"
         );
-        // const providers = normalizeProvidersPayload(response);
+        // const providers = normalizeProvidersPayload(response)
         const providersPayload = response?.data?.providers;
         const providers = normalizeProvidersPayload(providersPayload).map(
             (provider) => ({
