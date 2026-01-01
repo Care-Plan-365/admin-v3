@@ -37,18 +37,27 @@ interface ProvidersApiResponse {
     };
 }
 
-function* fetchProviders() {
+const buildProvidersPath = (status?: string) => {
+    if (!status) {
+        return "/admin/providers";
+    }
+
+    const params = new URLSearchParams({ status });
+    return `/admin/providers?${params.toString()}`;
+};
+
+function* fetchProviders(action: { payload?: { status?: string } }) {
     try {
+        const status = action?.payload?.status;
         const response: ProvidersApiResponse = yield call(
             apiClient<ProvidersApiResponse>,
-            "/admin/providers"
+            buildProvidersPath(status)
         );
         // const providers = normalizeProvidersPayload(response);
         const providersPayload = response?.data?.providers;
         const providers = normalizeProvidersPayload(providersPayload);
 
         yield put(fetchProvidersSuccess(providers));
-        console.log(response.data?.providers, "response");
     } catch (error) {
         yield put(fetchProvidersFailure(getMessage(error)));
     }
