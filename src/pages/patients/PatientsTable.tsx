@@ -10,6 +10,9 @@ export const PatientsTable = ({
     patients,
     renderActions,
 }: PatientsTableProps) => {
+    // 👇 Add your console.log here
+    console.log("Patients", patients);
+
     return (
         <div className="overflow-x-auto">
             <div className="min-w-[680px] overflow-hidden rounded-2xl border border-cp365-border bg-white shadow-sm">

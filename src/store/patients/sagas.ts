@@ -34,19 +34,17 @@ interface PatientsApiResponse {
     };
 }
 
-function* fetchPatients(action: ReturnType<typeof fetchPatientsRequest>) {
+function* fetchPatients() {
     try {
-        const params = new URLSearchParams({
-            status: action.payload.status,
-        });
         const response: PatientsApiResponse = yield call(
             apiClient<PatientsApiResponse>,
-            `/admin/patients?${params.toString()}`
+            "/admin/patients"
         );
         // const patients = normalizePatientsPayload(response);
         const patientsPayload = response?.data?.patients;
         const patients = normalizePatientsPayload(patientsPayload);
         yield put(fetchPatientsSuccess(patients));
+        console.log(response.data?.patients, "response");
     } catch (error) {
         if (error instanceof ApiError && error.status === 401) {
             yield call(clearAuthSession);
