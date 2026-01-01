@@ -11,13 +11,21 @@ import { useProviderContext } from '../../hooks/useProviderContext';
 export const ProvidersPage = () => {
   const [activeTab, setActiveTab] = useState<'current' | 'new' | 'rejected'>('current');
   const navigate = useNavigate();
-  const { refreshProviders, hasLoaded, isLoading, error } = useProviderContext();
+  const { refreshProviders, error } = useProviderContext();
 
   useEffect(() => {
-    if (!hasLoaded && !isLoading) {
-      refreshProviders();
+    if (activeTab === 'current') {
+      refreshProviders('Approved');
+      return;
     }
-  }, [hasLoaded, isLoading, refreshProviders]);
+
+    if (activeTab === 'new') {
+      refreshProviders('Pending');
+      return;
+    }
+
+    refreshProviders('Rejected');
+  }, [activeTab, refreshProviders]);
 
   return (
     <section className="space-y-6">

@@ -25,7 +25,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [isAuthenticated]);
 
-  const login = (_email: string, _password: string) => {
+  const login = (email: string, password: string) => {
+    void email;
+    void password;
     setIsAuthenticated(true);
   };
 

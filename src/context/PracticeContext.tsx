@@ -1,6 +1,11 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import type { Practice } from "../types/practice";
-import type { Location, LocationProvider } from "../types/location";
+import type {
+    Location,
+    LocationInput,
+    LocationProvider,
+    LocationProviderInput,
+} from "../types/location";
 import { PracticeContext } from "./practice-context";
 
 const initialPractices: Practice[] = [
@@ -51,7 +56,10 @@ export const PracticeContextProvider = ({
     const getPracticeById = (id: string) =>
         practices.find((practice) => practice.id === id);
 
-    const addLocationToPractice = (practiceId: string, location: Location) => {
+    const addLocationToPractice = (
+        practiceId: string,
+        location: LocationInput
+    ) => {
         const newLocation: Location = {
             ...location,
             id: location.id ?? Date.now(),
@@ -74,8 +82,13 @@ export const PracticeContextProvider = ({
     const attachProviderToLocation = (
         practiceId: string,
         locationId: number,
-        provider: LocationProvider
+        provider: LocationProviderInput
     ) => {
+        const normalizedProvider: LocationProvider = {
+            ...provider,
+            id: provider.id ?? Date.now(),
+        };
+
         setPractices((prev) =>
             prev.map((practice) => {
                 if (practice.id !== practiceId) {
@@ -88,7 +101,10 @@ export const PracticeContextProvider = ({
                         location.id === locationId
                             ? {
                                   ...location,
-                                  providers: [...location.providers, provider],
+                                  providers: [
+                                      ...location.providers,
+                                      normalizedProvider,
+                                  ],
                               }
                             : location
                     ),
@@ -97,15 +113,12 @@ export const PracticeContextProvider = ({
         );
     };
 
-    const value = useMemo(
-        () => ({
-            practices,
-            getPracticeById,
-            addLocationToPractice,
-            attachProviderToLocation,
-        }),
-        [practices]
-    );
+    const value = {
+        practices,
+        getPracticeById,
+        addLocationToPractice,
+        attachProviderToLocation,
+    };
 
     return (
         <PracticeContext.Provider value={value}>
