@@ -1,6 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Provider } from "../../types/provider";
 
+export type ProvidersFetchStatus = "Pending" | "Approved" | "Rejected";
+
 interface ProvidersState {
     providers: Provider[];
     loading: boolean;
@@ -21,7 +23,10 @@ const providersSlice = createSlice({
     name: "providers",
     initialState,
     reducers: {
-        fetchProvidersRequest(state) {
+        fetchProvidersRequest(
+            state,
+            _action: PayloadAction<{ status?: ProvidersFetchStatus } | undefined>
+        ) {
             state.loading = true;
             state.error = null;
         },
