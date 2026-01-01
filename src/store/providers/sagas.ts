@@ -16,6 +16,32 @@ import { normalizeEntityArray } from "../../utils/normalizeEntityArray";
 
 const providerArrayKeys = ["providers", "data", "items", "results"];
 
+type ProviderStatus = Provider["status"];
+
+const normalizeProviderStatus = (status: unknown): ProviderStatus | undefined => {
+    if (typeof status !== "string") {
+        return undefined;
+    }
+
+    const normalized = status.trim().toLowerCase();
+    if (normalized === "pending" || normalized === "approved" || normalized === "rejected") {
+        return normalized as ProviderStatus;
+    }
+
+    return undefined;
+};
+
+const normalizeProvider = (provider: Provider): Provider => {
+    const rawStatus = (provider as unknown as { status?: unknown }).status;
+    const status = normalizeProviderStatus(rawStatus);
+
+    if (!status || status === provider.status) {
+        return provider;
+    }
+
+    return { ...provider, status };
+};
+
 const normalizeProvidersPayload = (payload: unknown): Provider[] => {
     return normalizeEntityArray<Provider>(
         payload,
@@ -55,7 +81,7 @@ function* fetchProviders(action: { payload?: { status?: string } }) {
         );
         // const providers = normalizeProvidersPayload(response);
         const providersPayload = response?.data?.providers;
-        const providers = normalizeProvidersPayload(providersPayload);
+        const providers = normalizeProvidersPayload(providersPayload).map(normalizeProvider);
 
         yield put(fetchProvidersSuccess(providers));
     } catch (error) {
