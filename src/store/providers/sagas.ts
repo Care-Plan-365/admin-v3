@@ -1,5 +1,6 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import { apiClient } from "../../api/client";
+import { toast } from "vyrn";
 import {
     approveProviderFailure,
     approveProviderRequest,
@@ -69,9 +70,12 @@ function* approveProvider(action: { type: string; payload: { id: string } }) {
         yield call(apiClient, `/admin/providers/${id}/approve`, {
             method: "POST",
         });
+        toast.success("Provider approved.");
         yield put(approveProviderSuccess({ id }));
     } catch (error) {
-        yield put(approveProviderFailure({ id, error: getMessage(error) }));
+        const message = getMessage(error);
+        toast.error(`Unable to approve provider. ${message}`);
+        yield put(approveProviderFailure({ id, error: message }));
     }
 }
 
@@ -81,9 +85,12 @@ function* rejectProvider(action: { type: string; payload: { id: string } }) {
         yield call(apiClient, `/admin/providers/${id}/reject`, {
             method: "POST",
         });
+        toast.success("Provider rejected.");
         yield put(rejectProviderSuccess({ id }));
     } catch (error) {
-        yield put(rejectProviderFailure({ id, error: getMessage(error) }));
+        const message = getMessage(error);
+        toast.error(`Unable to reject provider. ${message}`);
+        yield put(rejectProviderFailure({ id, error: message }));
     }
 }
 

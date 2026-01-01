@@ -1,4 +1,6 @@
+import { useMemo, useState } from 'react';
 import { Button } from '../../components/ui/Button';
+import { Modal } from '../../components/ui/Modal';
 import { useProviderContext } from '../../hooks/useProviderContext';
 import { ProvidersTable } from './ProvidersTable';
 
@@ -7,6 +9,36 @@ export const NewProvidersTab = () => {
   // This tab uses the existing "Pending" providers query (triggered by `ProvidersPage`),
   // so the current `providers` list is already the pending set.
   const pendingProviders = providers;
+  const [confirmation, setConfirmation] = useState<{ id: string; action: 'approve' | 'reject' } | null>(null);
+
+  const confirmationCopy = useMemo(() => {
+    if (!confirmation) {
+      return null;
+    }
+
+    return confirmation.action === 'approve'
+      ? 'Are you sure you want to approve this provider'
+      : 'Are you sure you want to reject this provider';
+  }, [confirmation]);
+
+  const isConfirming = Boolean(confirmation);
+  const isConfirmationUpdating = confirmation ? Boolean(updating[confirmation.id]) : false;
+
+  const closeConfirmation = () => setConfirmation(null);
+  const confirmAction = () => {
+    if (!confirmation) {
+      return;
+    }
+
+    if (confirmation.action === 'approve') {
+      approveProvider(confirmation.id);
+      closeConfirmation();
+      return;
+    }
+
+    rejectProvider(confirmation.id);
+    closeConfirmation();
+  };
 
   if (isLoading && !providers.length) {
     return (
@@ -46,13 +78,17 @@ export const NewProvidersTab = () => {
           const isUpdating = Boolean(updating[provider.id]);
           return (
             <>
-              <Button size="sm" onClick={() => approveProvider(provider.id)} disabled={isUpdating}>
+              <Button
+                size="sm"
+                onClick={() => setConfirmation({ id: provider.id, action: 'approve' })}
+                disabled={isUpdating}
+              >
                 {isUpdating ? 'Updating…' : 'Approve'}
               </Button>
               <Button
                 size="sm"
                 variant="danger"
-                onClick={() => rejectProvider(provider.id)}
+                onClick={() => setConfirmation({ id: provider.id, action: 'reject' })}
                 disabled={isUpdating}
               >
                 {isUpdating ? 'Updating…' : 'Reject'}
@@ -61,6 +97,27 @@ export const NewProvidersTab = () => {
           );
         }}
       />
+
+      <Modal
+        open={isConfirming}
+        onClose={closeConfirmation}
+        footer={
+          <>
+            <Button variant="secondary" onClick={closeConfirmation} disabled={isConfirmationUpdating}>
+              Cancel
+            </Button>
+            <Button
+              variant={confirmation?.action === 'reject' ? 'danger' : 'primary'}
+              onClick={confirmAction}
+              disabled={isConfirmationUpdating}
+            >
+              {isConfirmationUpdating ? 'Updating…' : confirmation?.action === 'approve' ? 'Approve' : 'Reject'}
+            </Button>
+          </>
+        }
+      >
+        <p>{confirmationCopy}</p>
+      </Modal>
     </div>
   );
 };
