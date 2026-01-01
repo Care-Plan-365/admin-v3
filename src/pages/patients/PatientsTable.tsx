@@ -46,7 +46,7 @@ export const PatientsTable = ({
                                 <td className="px-6 py-4">{patient.city}</td>
                                 {/* @ts-expect-error email */}
                                 <td className="px-6 py-4">{patient.email}</td>
-                                {/* @ts-expect-error sex */}
+                                {/* @ts-expect-error gender */}
                                 <td className="px-6 py-4">{patient.sex}</td>
                                 <td className="px-6 py-4">
                                     {patient.providerName}
