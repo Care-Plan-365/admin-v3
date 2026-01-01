@@ -25,10 +25,11 @@ const providersSlice = createSlice({
     reducers: {
         fetchProvidersRequest(
             state,
-            _action: PayloadAction<
+            action: PayloadAction<
                 { status?: ProvidersFetchStatus } | undefined
             >
         ) {
+            void action.payload;
             state.loading = true;
             state.error = null;
         },

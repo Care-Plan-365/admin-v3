@@ -88,7 +88,7 @@ function* rejectProvider(action: { type: string; payload: { id: string } }) {
 }
 
 export function* providersSaga() {
-    yield takeLatest(fetchProvidersRequest.type, fetchProviders);
-    yield takeEvery(approveProviderRequest.type, approveProvider);
-    yield takeEvery(rejectProviderRequest.type, rejectProvider);
+    yield takeLatest(fetchProvidersRequest.match, fetchProviders);
+    yield takeEvery(approveProviderRequest.match, approveProvider);
+    yield takeEvery(rejectProviderRequest.match, rejectProvider);
 }

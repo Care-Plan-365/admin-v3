@@ -49,9 +49,7 @@ export const PracticeDetailPage = () => {
     }
 
     addLocationToPractice(practice.id, {
-      id: Date.now(),
       name: newLocationName.trim(),
-      minorId: `MIN${Math.floor(Math.random() * 100000)}`,
       active: true,
       providers: [],
     });
@@ -92,7 +90,6 @@ export const PracticeDetailPage = () => {
     }
 
     attachProviderToLocation(practice.id, selectedLocation.id, {
-      id: Date.now(),
       fullName: `${selectedProvider.firstName} ${selectedProvider.lastName}`,
       providerNumber: providerNumber.trim(),
       active: true,
