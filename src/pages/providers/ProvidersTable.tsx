@@ -76,7 +76,7 @@ export const ProvidersTable = ({
                                         {getAHPRA(providerLike)}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {/* @ts-expect-error  EMAIL*/}
+                                        {/* @ts-expect-error  EMAILL*/}
                                         {provider.email}
                                     </td>
                                     {includePractice && (
