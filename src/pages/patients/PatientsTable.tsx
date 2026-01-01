@@ -22,6 +22,8 @@ export const PatientsTable = ({
                             <th className="px-6 py-3">First Name Initial</th>
                             <th className="px-6 py-3">Last Name Initial</th>
                             <th className="px-6 py-3">Suburb</th>
+                            <th className="px-6 py-3">Email</th>
+                            <th className="px-6 py-3">Gender</th>
                             <th className="px-6 py-3">Provider</th>
                             {renderActions && (
                                 <th className="px-6 py-3 text-right">Action</th>
@@ -42,6 +44,10 @@ export const PatientsTable = ({
                                 </td>
                                 {/* @ts-expect-error location */}
                                 <td className="px-6 py-4">{patient.city}</td>
+                                {/* @ts-expect-error email */}
+                                <td className="px-6 py-4">{patient.email}</td>
+                                {/* @ts-expect-error sex */}
+                                <td className="px-6 py-4">{patient.sex}</td>
                                 <td className="px-6 py-4">
                                     {patient.providerName}
                                 </td>
