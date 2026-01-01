@@ -7,8 +7,8 @@ import { filterPatients } from './utils';
 
 export const NewPatientsTab = () => {
   const { patients, approvePatient, rejectPatient, isLoading } = usePatientContext();
-  const newPatients = useMemo(
-    () => patients.filter((patient) => patient.status === 'new'),
+  const pendingPatients = useMemo(
+    () => patients.filter((patient) => patient.status === 'pending' || patient.status === 'new'),
     [patients],
   );
 
@@ -16,8 +16,8 @@ export const NewPatientsTab = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredPatients = useMemo(
-    () => filterPatients(newPatients, searchTerm),
-    [newPatients, searchTerm],
+    () => filterPatients(pendingPatients, searchTerm),
+    [pendingPatients, searchTerm],
   );
 
   const handleSearch = () => {
@@ -29,7 +29,7 @@ export const NewPatientsTab = () => {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cp365-textMuted">
-            New
+            New patients
           </p>
           <h2 className="text-xl font-semibold text-cp365-textMain">Awaiting approval</h2>
         </div>

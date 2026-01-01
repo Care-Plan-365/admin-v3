@@ -4,6 +4,7 @@ import {
   approvePatient,
   fetchPatientsRequest,
   rejectPatient,
+  type PatientsStatusQuery,
 } from '../store/patients/slice';
 
 export const usePatientContext = () => {
@@ -26,9 +27,12 @@ export const usePatientContext = () => {
     [dispatch],
   );
 
-  const refreshPatients = useCallback(() => {
-    dispatch(fetchPatientsRequest());
-  }, [dispatch]);
+  const refreshPatients = useCallback(
+    (status: PatientsStatusQuery) => {
+      dispatch(fetchPatientsRequest({ status }));
+    },
+    [dispatch],
+  );
 
   return {
     patients,
