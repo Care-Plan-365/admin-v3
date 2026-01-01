@@ -9,7 +9,7 @@ const initialPatients: Patient[] = [
     lastName: 'Adaji',
     suburb: 'Berwick, VIC',
     providerName: 'Dr. John Smith',
-    status: 'new',
+    status: 'pending',
   },
   {
     id: '2',
@@ -17,7 +17,7 @@ const initialPatients: Patient[] = [
     lastName: 'Doe',
     suburb: 'Melbourne, VIC',
     providerName: 'Dr. Jane Jones',
-    status: 'current',
+    status: 'approved',
   },
   {
     id: '3',
@@ -25,7 +25,7 @@ const initialPatients: Patient[] = [
     lastName: 'Ng',
     suburb: 'Geelong, VIC',
     providerName: 'Dr. Priya Kumar',
-    status: 'current',
+    status: 'approved',
   },
   {
     id: '4',
@@ -41,7 +41,7 @@ const initialPatients: Patient[] = [
     lastName: 'Taylor',
     suburb: 'Carlton, VIC',
     providerName: 'Dr. Zoe Adams',
-    status: 'new',
+    status: 'pending',
   },
 ];
 
@@ -51,8 +51,8 @@ export const PatientContextProvider = ({ children }: { children: ReactNode }) =>
   const approvePatient = (id: string) => {
     setPatients((prev) =>
       prev.map((patient) =>
-        patient.id === id && patient.status === 'new'
-          ? { ...patient, status: 'current' }
+        patient.id === id && patient.status === 'pending'
+          ? { ...patient, status: 'approved' }
           : patient,
       ),
     );

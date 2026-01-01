@@ -1,4 +1,4 @@
-export type PatientStatus = 'current' | 'new' | 'rejected';
+export type PatientStatus = 'pending' | 'approved' | 'rejected';
 
 export interface Patient {
   id: string;

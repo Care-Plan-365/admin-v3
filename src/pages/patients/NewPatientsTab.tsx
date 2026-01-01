@@ -7,17 +7,16 @@ import { filterPatients } from './utils';
 
 export const NewPatientsTab = () => {
   const { patients, approvePatient, rejectPatient, isLoading } = usePatientContext();
-  const newPatients = useMemo(
-    () => patients.filter((patient) => patient.status === 'new'),
-    [patients],
-  );
+  // This tab uses the existing "pending" patients query (triggered by `PatientsPage`),
+  // so the current `patients` list is already the pending set.
+  const pendingPatients = patients;
 
   const [query, setQuery] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredPatients = useMemo(
-    () => filterPatients(newPatients, searchTerm),
-    [newPatients, searchTerm],
+    () => filterPatients(pendingPatients, searchTerm),
+    [pendingPatients, searchTerm],
   );
 
   const handleSearch = () => {
