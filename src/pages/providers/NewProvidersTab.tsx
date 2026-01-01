@@ -1,10 +1,12 @@
 import { Button } from '../../components/ui/Button';
-import { Table } from '../../components/ui/Table';
 import { useProviderContext } from '../../hooks/useProviderContext';
+import { ProvidersTable } from './ProvidersTable';
 
 export const NewProvidersTab = () => {
   const { providers, approveProvider, rejectProvider, isLoading, updating } = useProviderContext();
-  const pendingProviders = providers.filter((provider) => provider.status === 'pending');
+  // This tab uses the existing "Pending" providers query (triggered by `ProvidersPage`),
+  // so the current `providers` list is already the pending set.
+  const pendingProviders = providers;
 
   if (isLoading && !providers.length) {
     return (
@@ -38,48 +40,27 @@ export const NewProvidersTab = () => {
         <p className="text-sm font-medium text-cp365-textMuted">{pendingProviders.length} awaiting review</p>
       </div>
 
-      <Table>
-        <thead className="bg-cp365-bg text-left text-xs font-semibold uppercase tracking-wide text-cp365-textMuted">
-          <tr>
-            <th className="px-6 py-4">First Name</th>
-            <th className="px-6 py-4">Last Name</th>
-            <th className="px-6 py-4">AHPRA Number</th>
-            <th className="px-6 py-4">Provider Type</th>
-            <th className="px-6 py-4 text-right">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pendingProviders.map((provider) => {
-            const isUpdating = Boolean(updating[provider.id]);
-            return (
-              <tr
-                key={provider.id}
-                className="border-t border-cp365-border/80 text-sm text-cp365-textMain transition hover:bg-slate-50"
+      <ProvidersTable
+        providers={pendingProviders}
+        renderActions={(provider) => {
+          const isUpdating = Boolean(updating[provider.id]);
+          return (
+            <>
+              <Button size="sm" onClick={() => approveProvider(provider.id)} disabled={isUpdating}>
+                {isUpdating ? 'Updating…' : 'Approve'}
+              </Button>
+              <Button
+                size="sm"
+                variant="danger"
+                onClick={() => rejectProvider(provider.id)}
+                disabled={isUpdating}
               >
-                <td className="px-6 py-4 font-semibold">{provider.firstName}</td>
-                <td className="px-6 py-4">{provider.lastName}</td>
-                <td className="px-6 py-4">{provider.ahpraNumber ?? '—'}</td>
-                <td className="px-6 py-4">{provider.providerType}</td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex justify-end gap-2">
-                    <Button size="sm" onClick={() => approveProvider(provider.id)} disabled={isUpdating}>
-                      {isUpdating ? 'Updating…' : 'Approve'}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="danger"
-                      onClick={() => rejectProvider(provider.id)}
-                      disabled={isUpdating}
-                    >
-                      {isUpdating ? 'Updating…' : 'Reject'}
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+                {isUpdating ? 'Updating…' : 'Reject'}
+              </Button>
+            </>
+          );
+        }}
+      />
     </div>
   );
 };
