@@ -7,16 +7,16 @@ import { filterPatients } from "./utils";
 export const CurrentPatientsTab = () => {
     const { patients, isLoading } = usePatientContext();
 
-    const currentPatients = patients;
+    // This tab uses the existing "approved" patients query (triggered by `PatientsPage`),
+    // so the current `patients` list is already the approved set.
+    const approvedPatients = patients;
     const [query, setQuery] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
 
     const filteredPatients = useMemo(
-        () => filterPatients(currentPatients, searchTerm),
-        [currentPatients, searchTerm]
+        () => filterPatients(approvedPatients, searchTerm),
+        [approvedPatients, searchTerm]
     );
-
-    console.log(currentPatients, "currentPatients");
 
     const handleSearch = () => {
         setSearchTerm(query.trim());
@@ -49,7 +49,7 @@ export const CurrentPatientsTab = () => {
                     No current patients to display.
                 </div>
             ) : (
-                <PatientsTable patients={patients} />
+                <PatientsTable patients={filteredPatients} />
             )}
         </div>
     );

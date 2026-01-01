@@ -34,17 +34,26 @@ interface PatientsApiResponse {
     };
 }
 
-function* fetchPatients() {
+const buildPatientsPath = (status?: string) => {
+    if (!status) {
+        return "/admin/patients";
+    }
+
+    const params = new URLSearchParams({ status });
+    return `/admin/patients?${params.toString()}`;
+};
+
+function* fetchPatients(action: { payload?: { status?: string } }) {
     try {
+        const status = action?.payload?.status;
         const response: PatientsApiResponse = yield call(
             apiClient<PatientsApiResponse>,
-            "/admin/patients"
+            buildPatientsPath(status)
         );
         // const patients = normalizePatientsPayload(response);
         const patientsPayload = response?.data?.patients;
         const patients = normalizePatientsPayload(patientsPayload);
         yield put(fetchPatientsSuccess(patients));
-        console.log(response.data?.patients, "response");
     } catch (error) {
         if (error instanceof ApiError && error.status === 401) {
             yield call(clearAuthSession);
@@ -62,5 +71,5 @@ function* fetchPatients() {
 }
 
 export function* patientsSaga() {
-    yield takeLatest(fetchPatientsRequest.type, fetchPatients);
+    yield takeLatest(fetchPatientsRequest.match, fetchPatients);
 }
