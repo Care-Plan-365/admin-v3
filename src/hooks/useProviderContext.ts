@@ -4,6 +4,7 @@ import {
   approveProviderRequest,
   fetchProvidersRequest,
   rejectProviderRequest,
+  type ProvidersFetchStatus,
 } from '../store/providers/slice';
 
 export const useProviderContext = () => {
@@ -28,9 +29,12 @@ export const useProviderContext = () => {
     [dispatch],
   );
 
-  const refreshProviders = useCallback(() => {
-    dispatch(fetchProvidersRequest());
-  }, [dispatch]);
+  const refreshProviders = useCallback(
+    (status?: ProvidersFetchStatus) => {
+      dispatch(status ? fetchProvidersRequest({ status }) : fetchProvidersRequest());
+    },
+    [dispatch],
+  );
 
   return {
     providers,

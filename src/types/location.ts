@@ -12,3 +12,9 @@ export interface Location {
   active: boolean;
   providers: LocationProvider[];
 }
+
+export type LocationInput = Omit<Location, 'id' | 'minorId'> &
+  Partial<Pick<Location, 'id' | 'minorId'>>;
+
+export type LocationProviderInput = Omit<LocationProvider, 'id'> &
+  Partial<Pick<LocationProvider, 'id'>>;
