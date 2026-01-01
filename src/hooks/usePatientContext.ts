@@ -26,8 +26,8 @@ export const usePatientContext = () => {
     [dispatch],
   );
 
-  const refreshPatients = useCallback(() => {
-    dispatch(fetchPatientsRequest());
+  const refreshPatients = useCallback((status?: string) => {
+    dispatch(fetchPatientsRequest(status ? { status } : undefined));
   }, [dispatch]);
 
   return {

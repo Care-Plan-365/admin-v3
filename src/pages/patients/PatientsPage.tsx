@@ -13,14 +13,21 @@ type PatientTab = "current" | "new" | "rejected";
 export const PatientsPage = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<PatientTab>("current");
-    const { refreshPatients, hasLoaded, isLoading, error } =
-        usePatientContext();
+    const { refreshPatients, error } = usePatientContext();
 
     useEffect(() => {
-        if (!hasLoaded && !isLoading) {
-            refreshPatients();
+        if (activeTab === "current") {
+            refreshPatients("approved");
+            return;
         }
-    }, [hasLoaded, isLoading, refreshPatients]);
+
+        if (activeTab === "new") {
+            refreshPatients("pending");
+            return;
+        }
+
+        refreshPatients("rejected");
+    }, [activeTab, refreshPatients]);
 
     return (
         <section className="space-y-6">

@@ -8,6 +8,10 @@ interface PatientsState {
     hasLoaded: boolean;
 }
 
+export interface FetchPatientsPayload {
+    status?: string;
+}
+
 const initialState: PatientsState = {
     patients: [],
     loading: false,
@@ -19,7 +23,8 @@ const patientsSlice = createSlice({
     name: "patients",
     initialState,
     reducers: {
-        fetchPatientsRequest(state) {
+        fetchPatientsRequest(state, action: PayloadAction<FetchPatientsPayload | undefined>) {
+            void action;
             state.loading = true;
             state.error = null;
         },
@@ -35,8 +40,8 @@ const patientsSlice = createSlice({
         },
         approvePatient(state, action: PayloadAction<{ id: string }>) {
             state.patients = state.patients.map((patient) =>
-                patient.id === action.payload.id && patient.status === "new"
-                    ? { ...patient, status: "current" }
+                patient.id === action.payload.id && patient.status === "pending"
+                    ? { ...patient, status: "approved" }
                     : patient
             );
         },

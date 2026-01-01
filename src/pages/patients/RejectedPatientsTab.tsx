@@ -6,10 +6,9 @@ import { filterPatients } from './utils';
 
 export const RejectedPatientsTab = () => {
   const { patients, isLoading } = usePatientContext();
-  const rejectedPatients = useMemo(
-    () => patients.filter((patient) => patient.status === 'rejected'),
-    [patients],
-  );
+  // This tab uses the existing "rejected" patients query (triggered by `PatientsPage`),
+  // so the current `patients` list is already the rejected set.
+  const rejectedPatients = patients;
 
   const [query, setQuery] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
