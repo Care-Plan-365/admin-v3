@@ -7,24 +7,20 @@ import { CurrentPatientsTab } from "./CurrentPatientsTab";
 import { NewPatientsTab } from "./NewPatientsTab";
 import { RejectedPatientsTab } from "./RejectedPatientsTab";
 import { usePatientContext } from "../../hooks/usePatientContext";
-import type { PatientsStatusQuery } from "../../store/patients/slice";
 
 type PatientTab = "current" | "new" | "rejected";
 
 export const PatientsPage = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<PatientTab>("current");
-    const { refreshPatients, error } = usePatientContext();
+    const { refreshPatients, hasLoaded, isLoading, error } =
+        usePatientContext();
 
     useEffect(() => {
-        const tabStatusMap: Record<PatientTab, PatientsStatusQuery> = {
-            current: "approved",
-            new: "pending",
-            rejected: "rejected",
-        };
-
-        refreshPatients(tabStatusMap[activeTab]);
-    }, [activeTab, refreshPatients]);
+        if (!hasLoaded && !isLoading) {
+            refreshPatients();
+        }
+    }, [hasLoaded, isLoading, refreshPatients]);
 
     return (
         <section className="space-y-6">
@@ -73,7 +69,7 @@ export const PatientsPage = () => {
                     <Tabs
                         tabs={[
                             { id: "current", label: "Current" },
-                            { id: "new", label: "New patients" },
+                            { id: "new", label: "New" },
                             { id: "rejected", label: "Rejected" },
                         ]}
                         activeTab={activeTab}

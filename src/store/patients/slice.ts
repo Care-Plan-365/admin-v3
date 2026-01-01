@@ -1,14 +1,11 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Patient } from "../../types/patient";
 
-export type PatientsStatusQuery = "approved" | "pending" | "rejected";
-
 interface PatientsState {
     patients: Patient[];
     loading: boolean;
     error: string | null;
     hasLoaded: boolean;
-    activeStatus: PatientsStatusQuery | null;
 }
 
 const initialState: PatientsState = {
@@ -16,22 +13,15 @@ const initialState: PatientsState = {
     loading: false,
     error: null,
     hasLoaded: false,
-    activeStatus: null,
 };
 
 const patientsSlice = createSlice({
     name: "patients",
     initialState,
     reducers: {
-        fetchPatientsRequest(
-            state,
-            action: PayloadAction<{ status: PatientsStatusQuery }>
-        ) {
+        fetchPatientsRequest(state) {
             state.loading = true;
             state.error = null;
-            state.activeStatus = action.payload.status;
-            // Ensure tab switches don't momentarily show a different tab's data.
-            state.patients = [];
         },
         fetchPatientsSuccess(state, action: PayloadAction<Patient[]>) {
             state.loading = false;
@@ -45,9 +35,8 @@ const patientsSlice = createSlice({
         },
         approvePatient(state, action: PayloadAction<{ id: string }>) {
             state.patients = state.patients.map((patient) =>
-                patient.id === action.payload.id &&
-                (patient.status === "new" || patient.status === "pending")
-                    ? { ...patient, status: "approved" }
+                patient.id === action.payload.id && patient.status === "new"
+                    ? { ...patient, status: "current" }
                     : patient
             );
         },
